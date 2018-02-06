@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>动画demo</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        .main{
+            width:100px;
+            height:100px;
+            background-color: #f99;
+            position: absolute;
+            left:0;
+            top:40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main"></div>
+    <button class="btn">运动</button>
+
+
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="js/requestAnimationFrame.js"></script>
+    <script src="js/tween.js"></script>
+    <script>
+    window.onload=function() {
+        const obj = document.querySelector('.main');
+        // const btn=document.querySelector('.btn');
+        function animate() {
+            var t = 0, b = 0, c = 100, d = 10;
+            var step = function () {
+                // value就是当前的位置值
+                // 例如我们可以设置DOM.style.left = value + 'px'实现定位
+                var value = Tween.Linear(t, b, c, d);
+                t++;
+                if (t <= d) {
+                    // 继续运动
+                    requestAnimationFrame(step);
+                } else {
+                    // 动画结束
+                }
+            };
+        }
+        $(".btn").addEventListener('click', animate());
+    }
+    </script>
+</body>
+</html>
