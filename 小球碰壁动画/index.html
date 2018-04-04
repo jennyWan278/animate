@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>小球碰壁动画</title>
+</head>
+<body>
+    
+<button id="btn">变换</button>
+<canvas id="canvas" width="500" height="300" style="border:1px solid black">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+<script>
+    btn.onclick = function () { history.go(); }
+    var canvas = document.getElementById('canvas');
+    //存储画布宽高
+    var H = 300, W = 500;
+    //存储小球个数
+    var NUM = 10;
+    //存储小球
+    var balls = [];
+    function getBalls() {
+        if (canvas.getContext) {
+            var cxt = canvas.getContext('2d');
+            for (var i = 0; i < NUM; i++) {
+                var tempR = Math.floor(Math.random() * 255);
+                var tempG = Math.floor(Math.random() * 255);
+                var tempB = Math.floor(Math.random() * 255);
+                var tempColor = 'rgb(' + tempR + ',' + tempG + ',' + tempB + ')';
+                var tempR = Math.floor(Math.random() * 30 + 20);
+                var tempX = Math.floor(Math.random() * (W - tempR) + tempR);
+                var tempY = Math.floor(Math.random() * (H - tempR) + tempR);
+
+                var tempBall = {
+                    x: tempX,
+                    y: tempY,
+                    r: tempR,
+                    stepX: Math.floor(Math.random() * 21 - 10),
+                    stepY: Math.floor(Math.random() * 21 - 10),
+                    color: tempColor
+                };
+                balls.push(tempBall);
+            }
+        }
+    }
+    function updateBalls() {
+        for (var i = 0; i < balls.length; i++) {
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            bumpTest(balls[i]);
+        }
+    }
+    function bumpTest(ele) {
+        //左侧
+        if (ele.x <= ele.r) {
+            ele.x = ele.r;
+            ele.stepX = -ele.stepX;
+        }
+        //右侧
+        if (ele.x >= W - ele.r) {
+            ele.x = W - ele.r;
+            ele.stepX = -ele.stepX;
+        }
+        //上侧
+        if (ele.y <= ele.r) {
+            ele.y = ele.r;
+            ele.stepY = -ele.stepY;
+        }
+        //下侧
+        if (ele.y >= H - ele.r) {
+            ele.y = H - ele.r;
+            ele.stepY = -ele.stepY;
+        }
+    }
+    function renderBalls() {
+        //重置画布高度，达到清空画布的效果
+        canvas.height = H;
+        if (canvas.getContext) {
+            var cxt = canvas.getContext('2d');
+            for (var i = 0; i < balls.length; i++) {
+                cxt.beginPath();
+                cxt.arc(balls[i].x, balls[i].y, balls[i].r, 0, 2 * Math.PI);
+                cxt.fillStyle = balls[i].color;
+                cxt.globalCompositeOperation = 'xor';
+                cxt.closePath();
+                cxt.fill();
+            }
+        }
+
+    }
+    getBalls();
+    clearInterval(oTimer);
+    var oTimer = setInterval(function () {
+        //更新小球运动状态
+        updateBalls();
+        //渲染小球
+        renderBalls();
+    }, 50);
+</script>
+
+
+</body>
+</html>
